@@ -1,11 +1,14 @@
 package com.example.anuar_countdowntimerapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         countdownInput = findViewById(R.id.countdown_input)
         val timerText: TextView = findViewById(R.id.countdown_timer_text)
+        val circleContainer: View = findViewById(R.id.circle_container)
         val startStopButton: Button = findViewById(R.id.start_stop_button)
         val resetButton: Button = findViewById(R.id.reset_button)
 
@@ -31,13 +35,12 @@ class MainActivity : AppCompatActivity() {
             override fun run() {
                 if (remainingTime > 0) {
                     remainingTime--
-                    timerText.text = "$remainingTime seconds remaining"
+                    timerText.text = "$remainingTime sec"
                     handler.postDelayed(this, 1000)
                 } else {
                     timerText.text = "Time's up!"
-                    startStopButton.visibility = Button.GONE
-
                     stopTimer()
+                    startStopButton.visibility = Button.GONE
                 }
             }
         }
@@ -45,31 +48,29 @@ class MainActivity : AppCompatActivity() {
         startStopButton.setOnClickListener {
             val inputTime = countdownInput.text.toString()
 
-            if (!TextUtils.isEmpty(inputTime)) {
-                try {
-                    remainingTime = inputTime.toInt()
-
-                    if (!timerActive) {
-                        timerActive = true
-                        startStopButton.text = "Stop"
+            if (!timerActive) {
+                if (remainingTime == 60 && inputTime.isNotEmpty()) {
+                    try {
+                        remainingTime = inputTime.toInt()
                         countdownInput.visibility = EditText.GONE
-                        timerText.visibility = TextView.VISIBLE
-                        handler.post(timerRunnable)
-                    } else {
-                        stopTimer()
-                        startStopButton.text = "Start"
+                        circleContainer.visibility = View.VISIBLE
+                    } catch (e: NumberFormatException) {
+                        Toast.makeText(this, "Invalid time entered", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
                     }
-                } catch (e: NumberFormatException) {
-                    Toast.makeText(this, "Invalid time entered", Toast.LENGTH_SHORT).show()
                 }
+                timerActive = true
+                startStopButton.text = "Stop"
+                handler.post(timerRunnable)
             } else {
-                Toast.makeText(this, "Please enter a time", Toast.LENGTH_SHORT).show()
+                stopTimer()
+                startStopButton.text = "Start"
             }
         }
 
         resetButton.setOnClickListener {
             stopTimer()
-            resetTimer(timerText, startStopButton)
+            resetTimer(timerText, startStopButton, circleContainer)
         }
     }
 
@@ -78,12 +79,13 @@ class MainActivity : AppCompatActivity() {
         timerActive = false
     }
 
-    private fun resetTimer(timerText: TextView, startStopButton: Button) {
+    private fun resetTimer(timerText: TextView, startStopButton: Button, circleContainer: View) {
         remainingTime = 60
         timerActive = false
         startStopButton.text = "Start"
         countdownInput.visibility = EditText.VISIBLE
-        timerText.visibility = TextView.GONE
+        circleContainer.visibility = View.GONE
         startStopButton.visibility = Button.VISIBLE
     }
 }
+

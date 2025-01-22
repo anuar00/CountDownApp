@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,36 +5,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/colorBackground">
+    android:background="@drawable/konoha">
 
     <EditText
         android:id="@+id/countdown_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="220dp"
+        android:layout_marginBottom="288dp"
         android:background="@drawable/edittext_background"
-        android:hint="Enter countdown time (seconds)"
+        android:hint="Enter seconds"
         android:inputType="number"
         android:padding="16dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#BC3B19"
         app:layout_constraintBottom_toTopOf="@id/start_stop_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/countdown_timer_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="60 seconds remaining"
-        android:textSize="30sp"
+    <FrameLayout
+        android:id="@+id/circle_container"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:visibility="gone"
-        android:padding="16dp"
-        style="@style/CountdownTimerText"
-        app:layout_constraintBottom_toTopOf="@id/start_stop_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/start_stop_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <View
+            android:id="@+id/circle_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/circle_background" />
+
+        <TextView
+            android:id="@+id/countdown_timer_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="60 seconds"
+            android:textSize="30sp"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:layout_gravity="center" />
+    </FrameLayout>
 
     <Button
         android:id="@+id/start_stop_button"
